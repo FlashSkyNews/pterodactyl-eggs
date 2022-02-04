@@ -9,7 +9,6 @@ on:
       
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
   
 jobs:
   push:
@@ -29,6 +28,11 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY_TOKEN }}
+      - name: convert repo name to lowercase
+        run: |
+          echo "IMAGE_NAME_LC=${IMAGE_NAME,,}" >>${GITHUB_ENV}
+        env:
+          IMAGE_NAME: '${{ github.repository }}' # contains <owner>/<repo_name>
       - uses: docker/build-push-action@v2
         with:
           context: ./TS3AudioBot/Dotnet-Alpine/dev/Docker
@@ -36,4 +40,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:ts3audiobot
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_LC }}:ts3audiobot
