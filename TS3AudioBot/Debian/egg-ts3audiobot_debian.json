@@ -1,0 +1,50 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v1",
+        "update_url": null
+    },
+    "exported_at": "2022-02-04T19:38:44+01:00",
+    "name": "TS3AudioBot_debian",
+    "author": "Bl4ckBirb @ github.com",
+    "description": "Egg for the TS3AudioBot (https:\/\/github.com\/Splamy\/TS3AudioBot)",
+    "features": null,
+    "images": [
+        "ghcr.io\/bl4ckbirb\/pterodactyl-eggs:ts3audiobot-debian"
+    ],
+    "file_denylist": [],
+    "startup": ".\/TS3AudioBot --non-interactive",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"Client connected.\",\r\n    \"userInteraction\": []\r\n}",
+        "logs": "{\r\n    \"custom\": true,\r\n    \"location\": \"logs\/latest.log\"\r\n}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/bash\r\n\r\n## update the system and install required packages \r\napt update\r\napt upgrade -y\r\napt install curl tar -y\r\n\r\n## make and change to directory\r\nmkdir \/mnt\/server\r\ncd \/mnt\/server\/\r\n\r\n## install youtube-dl\r\ncurl -L https:\/\/yt-dl.org\/downloads\/latest\/youtube-dl -o youtube-dl\r\nchmod a+rx youtube-dl\r\n\r\n## get download link\r\nDOWNLOAD_FILE=\"TS3AudioBot_linux_x64.tar.gz\"\r\nif [ \"${VERSION}\" == \"\" ] || [ \"${VERSION}\" == \"latest\" ]; then\r\n    DOWNLOAD_URL=$(echo \"https:\/\/github.com\/Splamy\/TS3AudioBot\/releases\/latest\/download\/${DOWNLOAD_FILE}\")\r\nelse\r\n    DOWNLOAD_URL=$(echo \"https:\/\/github.com\/Splamy\/TS3AudioBot\/releases\/download\/${VERSION}\/${DOWNLOAD_FILE}\")\r\nfi\r\n \r\nif [ ! -z \"${DOWNLOAD_URL}\" ]; then\r\n    if curl --output \/dev\/null --silent --head --fail ${DOWNLOAD_URL}; then\r\n        echo -e \"link is valid. setting download link to ${DOWNLOAD_URL}\"\r\n        DOWNLOAD_LINK=${DOWNLOAD_URL}\r\n    else       \r\n        echo -e \"link is invalid closing out\"\r\n        exit 2\r\n    fi\r\nfi\r\n\r\n## download files\r\nOUTPUT_FILE=\"TS3AudioBot.tar.gz\"\r\necho -e \"running: curl -sSL -o ${OUTPUT_FILE} ${DOWNLOAD_LINK}\"\r\ncurl -sSL -o ${OUTPUT_FILE} ${DOWNLOAD_LINK}\r\n\r\n## unpack files\r\necho -e \"unpacking files\"\r\ntar xzvf ${OUTPUT_FILE}\r\nrm ${OUTPUT_FILE}\r\n\r\necho -e \"Install complete.\"",
+            "container": "debian:buster-slim",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Version",
+            "description": "TS3AudioBot Version according to https:\/\/github.com\/Splamy\/TS3AudioBot\/releases",
+            "env_variable": "VERSION",
+            "default_value": "latest",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20"
+        },
+        {
+            "name": "dotnet extract dir",
+            "description": "",
+            "env_variable": "DOTNET_BUNDLE_EXTRACT_BASE_DIR",
+            "default_value": "\/tmp",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|string|max:20"
+        }
+    ]
+}
