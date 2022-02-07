@@ -2,11 +2,11 @@
 
 ## install required packages 
 apk update
-apk add curl tar unzip
+apk add curl tar unzip opus-dev ffmpeg
 
-## create and change to directory
-mkdir /mnt/server
-cd /mnt/server/
+## make and change to directory
+mkdir /mnt/server/run
+cd /mnt/server/run
 
 ## install youtube-dl
 curl -sSL https://yt-dl.org/downloads/latest/youtube-dl -o youtube-dl
@@ -39,4 +39,24 @@ echo -e "unpacking files"
 unzip -o ${DOWNLOAD_FILE}
 rm ${DOWNLOAD_FILE}
 
-echo -e "Install complete."
+## perform a short startup so that all config files get created
+timeout -s SIGINT 3s dotnet TS3AudioBot.dll --non-interactive
+
+## move important files up one folder for easier access
+mv rights.toml ../
+mv ts3audiobot.toml ../
+mv bots ../
+mv logs ../
+
+cd ../
+
+## update file locations in the main config file
+sed -i 's+ts3audiobot.db+run/ts3audiobot.db+g' ts3audiobot.toml
+sed -i 's+youtube-dl = { path = "" }+youtube-dl = { path = "run/youtube-dl" }+g' ts3audiobot.toml
+
+
+echo -e ""
+echo -e "==================="
+echo -e " Install complete. "
+echo -e "==================="
+echo -e ""

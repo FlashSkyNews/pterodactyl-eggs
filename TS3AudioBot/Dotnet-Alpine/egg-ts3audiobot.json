@@ -4,16 +4,16 @@
         "version": "PTDL_v1",
         "update_url": null
     },
-    "exported_at": "2022-02-04T18:29:40+01:00",
+    "exported_at": "2022-02-07T20:45:06+01:00",
     "name": "TS3AudioBot",
     "author": "Bl4ckBirb @ github.com",
-    "description": "Egg for the TS3AudioBot (https://github.com/Splamy/TS3AudioBot)",
+    "description": "Egg for the TS3AudioBot (https:\/\/github.com\/Splamy\/TS3AudioBot)",
     "features": null,
     "images": [
         "ghcr.io\/bl4ckbirb\/pterodactyl-eggs:ts3audiobot"
     ],
     "file_denylist": [],
-    "startup": "dotnet TS3AudioBot.dll --non-interactive",
+    "startup": "dotnet run\/TS3AudioBot.dll --non-interactive",
     "config": {
         "files": "{}",
         "startup": "{\r\n    \"done\": \"Client connected.\",\r\n    \"userInteraction\": []\r\n}",
@@ -22,8 +22,8 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/bash\r\n\r\n## update the system and install required packages \r\napk update\r\napk add curl tar unzip\r\n\r\n## make and change to directory\r\nmkdir \/mnt\/server\r\ncd \/mnt\/server\/\r\n\r\n## install youtube-dl\r\ncurl -sSL https:\/\/yt-dl.org\/downloads\/latest\/youtube-dl -o youtube-dl\r\n\r\n## get download link\r\nif [ \"${VERSION}\" == \"\" ] || [ \"${VERSION}\" == \"latest\" ]; then\r\n    DOWNLOAD_URL=$(echo \"https:\/\/github.com\/Splamy\/TS3AudioBot\/releases\/latest\/download\/${DOWNLOAD_FILE}\")\r\nelse\r\n    DOWNLOAD_URL=$(echo \"https:\/\/github.com\/Splamy\/TS3AudioBot\/releases\/download\/${VERSION}\/${DOWNLOAD_FILE}\")\r\nfi\r\n \r\nif [ ! -z \"${DOWNLOAD_URL}\" ]; then\r\n    if curl --output \/dev\/null --silent --head --fail ${DOWNLOAD_URL}; then\r\n        echo -e \"link is valid. setting download link to ${DOWNLOAD_URL}\"\r\n        DOWNLOAD_LINK=${DOWNLOAD_URL}\r\n    else       \r\n        echo -e \"link is invalid closing out\"\r\n        exit 2\r\n    fi\r\nfi\r\n\r\n## download files\r\necho -e \"running: curl -sSL ${DOWNLOAD_LINK} -o ${DOWNLOAD_FILE}\"\r\ncurl -sSL ${DOWNLOAD_LINK} -o ${DOWNLOAD_FILE}\r\n\r\n## unpack files\r\necho -e \"unpacking files\"\r\nunzip -o ${DOWNLOAD_FILE}\r\nrm ${DOWNLOAD_FILE}\r\n\r\necho -e \"Install complete.\"",
-            "container": "alpine",
+            "script": "#!\/bin\/bash\r\n\r\n## update the system and install required packages \r\napk update\r\napk add curl tar unzip opus-dev ffmpeg\r\n\r\n## make and change to directory\r\nmkdir \/mnt\/server\/run\r\ncd \/mnt\/server\/run\r\n\r\n## install youtube-dl\r\ncurl -sSL https:\/\/yt-dl.org\/downloads\/latest\/youtube-dl -o youtube-dl\r\nchmod a+rx youtube-dl\r\n\r\n## get download link\r\nif [ \"${VERSION}\" == \"\" ] || [ \"${VERSION}\" == \"latest\" ]; then\r\n    DOWNLOAD_URL=$(echo \"https:\/\/github.com\/Splamy\/TS3AudioBot\/releases\/latest\/download\/${DOWNLOAD_FILE}\")\r\nelse\r\n    DOWNLOAD_URL=$(echo \"https:\/\/github.com\/Splamy\/TS3AudioBot\/releases\/download\/${VERSION}\/${DOWNLOAD_FILE}\")\r\nfi\r\n \r\nif [ ! -z \"${DOWNLOAD_URL}\" ]; then\r\n    if curl --output \/dev\/null --silent --head --fail ${DOWNLOAD_URL}; then\r\n        echo -e \"link is valid. setting download link to ${DOWNLOAD_URL}\"\r\n        DOWNLOAD_LINK=${DOWNLOAD_URL}\r\n    else       \r\n        echo -e \"link is invalid closing out\"\r\n        exit 2\r\n    fi\r\nfi\r\n\r\n## download files\r\necho -e \"running: curl -sSL ${DOWNLOAD_LINK} -o ${DOWNLOAD_FILE}\"\r\ncurl -sSL ${DOWNLOAD_LINK} -o ${DOWNLOAD_FILE}\r\n\r\n## unpack files\r\necho -e \"unpacking files\"\r\nunzip -o ${DOWNLOAD_FILE}\r\nrm ${DOWNLOAD_FILE}\r\n\r\n## do a quik startup so that all config files get created\r\ntimeout -s SIGINT 3s dotnet TS3AudioBot.dll --non-interactive\r\n\r\n## move importantfiles up one folder for easier access\r\nmv rights.toml ..\/\r\nmv ts3audiobot.toml ..\/\r\nmv bots ..\/\r\nmv logs ..\/\r\n\r\ncd ..\/\r\n\r\n## update file locations in the main config file\r\nsed -i 's+ts3audiobot.db+run\/ts3audiobot.db+g' ts3audiobot.toml\r\nsed -i 's+youtube-dl = { path = \"\" }+youtube-dl = { path = \"run\/youtube-dl\" }+g' ts3audiobot.toml\r\n\r\n\r\necho -e \"\"\r\necho -e \"===================\"\r\necho -e \" Install complete. \"\r\necho -e \"===================\"\r\necho -e \"\"",
+            "container": "mcr.microsoft.com\/dotnet\/core\/aspnet:3.1-alpine",
             "entrypoint": "ash"
         }
     },
