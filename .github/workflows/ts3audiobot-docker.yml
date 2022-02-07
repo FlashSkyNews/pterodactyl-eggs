@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - TS3AudioBot/**
+      - TS3AudioBot/dev/Docker/**
       
 env:
   REGISTRY: ghcr.io
