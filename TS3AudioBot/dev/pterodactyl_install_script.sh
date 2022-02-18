@@ -24,7 +24,7 @@ if [ ! -z "${DOWNLOAD_URL}" ]; then
     if curl --output /dev/null --silent --head --fail ${DOWNLOAD_URL}; then
         echo -e "link is valid. setting download link to ${DOWNLOAD_URL}"
         DOWNLOAD_LINK=${DOWNLOAD_URL}
-    else       
+    else
         echo -e "link is invalid closing out"
         exit 2
     fi
@@ -38,6 +38,10 @@ curl -sSL ${DOWNLOAD_LINK} -o ${DOWNLOAD_FILE}
 echo -e "unpacking files"
 unzip -o ${DOWNLOAD_FILE}
 rm ${DOWNLOAD_FILE}
+
+## create default bot folder as well as config file and fill it with values from panel variables
+mkdir -p bots/default
+echo -e "run = true \n[connect] \naddress = \"${SERVER_ADDRESS}\" \nserver_password = { pw = \"${SERVER_PASSWORD}\" } \nchannel = \"${CHANNEL}\" \nchannel_password = { pw = \"${CHANNEL_PASSWORD}\" } \nname = \"${BOT_NAME}\"" > bots/default/bot.toml
 
 ## perform a short startup so that all config files get created
 timeout -s SIGINT 3s dotnet TS3AudioBot.dll --non-interactive
