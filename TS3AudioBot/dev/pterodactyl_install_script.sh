@@ -58,6 +58,8 @@ cd ../
 sed -i 's+ts3audiobot.db+run/ts3audiobot.db+g' ts3audiobot.toml
 sed -i 's+youtube-dl = { path = "" }+youtube-dl = { path = "run/youtube-dl" }+g' ts3audiobot.toml
 
+## add useful bot commands
+sed -i '/^\[bot.commands.alias\]/a yt = "!search from youtube (!param 0)" \nytp = "!xecute (!search from youtube (!param 0)) (!search play 0)" \nyta = "!xecute (!search from youtube (!param 0)) (!search add 0)" \nlofi = "!play https://www.youtube.com/watch?v=5qap5aO4i9A"' ts3audiobot.toml
 
 echo -e ""
 echo -e "==================="
