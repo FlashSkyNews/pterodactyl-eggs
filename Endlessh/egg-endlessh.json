@@ -1,0 +1,31 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v1",
+        "update_url": null
+    },
+    "exported_at": "2022-02-27T00:43:31+01:00",
+    "name": "Endlessh",
+    "author": "Bl4ckBirb @ github",
+    "description": "Egg for the open source SSH tarpit \"Endlessh\" - https:\/\/github.com\/skeeto\/endlessh\r\n\r\nMost effective if you change your hosts actual SSH port and let Endlessh run on the default SSH port (22).",
+    "features": null,
+    "images": [
+        "ghcr.io\/pterodactyl\/yolks:alpine"
+    ],
+    "file_denylist": [],
+    "startup": ".\/endlessh -p {{SERVER_PORT}} -v",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"Port\",\r\n    \"userInteraction\": []\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/ash\r\n\r\n## install required packages \r\napk update\r\napk add --no-cache build-base git \r\n\r\n## download files\r\necho -e \"running: git clone https:\/\/github.com\/skeeto\/endlessh.git\"\r\ngit clone https:\/\/github.com\/skeeto\/endlessh.git\r\n\r\n## build programm\r\ncd endlessh\r\necho -e \"running: make\"\r\nmake\r\n\r\n## create server directory if it does not exist\r\n[ ! -d \"\/mnt\/server\" ] && mkdir \/mnt\/server\r\n\r\n## move programm to server home\r\nmv endlessh \/mnt\/server\/\r\n\r\necho -e \"\"\r\necho -e \" Install complete.\"\r\necho -e \"\"",
+            "container": "alpine:latest",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": []
+}
