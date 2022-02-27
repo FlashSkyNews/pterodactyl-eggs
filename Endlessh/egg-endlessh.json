@@ -4,7 +4,7 @@
         "version": "PTDL_v1",
         "update_url": null
     },
-    "exported_at": "2022-02-27T00:43:31+01:00",
+    "exported_at": "2022-02-27T13:05:42+01:00",
     "name": "Endlessh",
     "author": "Bl4ckBirb @ github",
     "description": "Egg for the open source SSH tarpit \"Endlessh\" - https:\/\/github.com\/skeeto\/endlessh\r\n\r\nMost effective if you change your hosts actual SSH port and let Endlessh run on the default SSH port (22).",
@@ -13,7 +13,7 @@
         "ghcr.io\/pterodactyl\/yolks:alpine"
     ],
     "file_denylist": [],
-    "startup": ".\/endlessh -p {{SERVER_PORT}} -v",
+    "startup": ".\/endlessh -p {{SERVER_PORT}} -d {{DELAY}} -l {{LINE_LENGTH}} -m {{MAX_CLIENTS}} -v",
     "config": {
         "files": "{}",
         "startup": "{\r\n    \"done\": \"Port\",\r\n    \"userInteraction\": []\r\n}",
@@ -27,5 +27,33 @@
             "entrypoint": "ash"
         }
     },
-    "variables": []
+    "variables": [
+        {
+            "name": "Message millisecond delay",
+            "description": "The endless banner is sent one line at a time. This is the delay in milliseconds between individual lines.",
+            "env_variable": "DELAY",
+            "default_value": "10000",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|integer"
+        },
+        {
+            "name": "Maximum banner line length",
+            "description": "The length of each line is randomized. This controls the maximum length of each line. Shorter lines may keep clients on for longer if they give up after a certain number of bytes.",
+            "env_variable": "LINE_LENGTH",
+            "default_value": "32",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|integer|between:3,255"
+        },
+        {
+            "name": "Maximum number of clients",
+            "description": "Maximum number of connections to accept at a time. Connections beyond this are not immediately rejected, but will wait in the queue.",
+            "env_variable": "MAX_CLIENTS",
+            "default_value": "4096",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|integer"
+        }
+    ]
 }
