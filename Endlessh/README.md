@@ -8,9 +8,23 @@ and then let the script kiddies get stuck in this tarpit instead of
 bothering a real server.
 
 ## Additional information
-Pterodactyl panel sadly does not let you use any ports lower than 1024 for your servers. As a workaround just set your server port to a random port (e.g. 2222) and forward port 22 on your host OS to this port.
-This can be done with iptables using the following command:
+Pterodactyl panel does not let you allocate any ports lower than or equal to 1024 for your servers and as the standard SSH port is 22 it is therefore not possible to assign this port to an Endlessh server by default.  
+To change this you have to do the following (partly described [here](https://github.com/pterodactyl/panel/issues/3749#issuecomment-1036498742)):
+  
+Open this file in the editor of your choice:
 
-    iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 22 -j REDIRECT --to-port 2222
+    /var/www/pterodactyl/app/Models/Allocation.php
+find this line (or similar): 
+    
+    'port' => 'required|numeric|between:1024,65535'  
+and change the 1024 to 21 or lower.
 
-Don't forget to make the rule persistent, otherwise it will be lost after a reboot. This can be done using the iptables-persistent package for example.
+Afterwards you also have to change the same number in another file:
+
+    /var/www/pterodactyl/app/Services/Allocations/AssignmentService.php
+search for this line (or similar): 
+    
+    public const PORT_FLOOR = 1024;
+and also change the 1024 to 21 or lower.
+
+Now you can allocate the port 22 in pterodactyl panel for your Endlessh server, so that it looks like a real SSH server from the outside.
