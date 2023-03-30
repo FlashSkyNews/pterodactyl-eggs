@@ -1,17 +1,17 @@
 {
     "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
     "meta": {
-        "version": "PTDL_v1",
+        "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2022-02-27T13:05:42+01:00",
+    "exported_at": "2023-03-30T19:16:44+02:00",
     "name": "Endlessh",
-    "author": "Bl4ckBirb @ github",
+    "author": "Bl4ckBirb@github.com",
     "description": "Egg for the open source SSH tarpit \"Endlessh\" - https:\/\/github.com\/skeeto\/endlessh\r\n\r\nMost effective if you change your hosts actual SSH port and let Endlessh run on the default SSH port (22).",
     "features": null,
-    "images": [
-        "ghcr.io\/pterodactyl\/yolks:alpine"
-    ],
+    "docker_images": {
+        "ghcr.io\/pterodactyl\/yolks:alpine": "ghcr.io\/pterodactyl\/yolks:alpine"
+    },
     "file_denylist": [],
     "startup": ".\/endlessh -p {{SERVER_PORT}} -d {{DELAY}} -l {{LINE_LENGTH}} -m {{MAX_CLIENTS}} -v",
     "config": {
@@ -35,7 +35,8 @@
             "default_value": "10000",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|integer"
+            "rules": "required|integer",
+            "field_type": "text"
         },
         {
             "name": "Maximum banner line length",
@@ -44,7 +45,8 @@
             "default_value": "32",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|integer|between:3,255"
+            "rules": "required|integer|between:3,255",
+            "field_type": "text"
         },
         {
             "name": "Maximum number of clients",
@@ -53,7 +55,8 @@
             "default_value": "4096",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|integer"
+            "rules": "required|integer",
+            "field_type": "text"
         }
     ]
 }

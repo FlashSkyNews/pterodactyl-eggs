@@ -1,17 +1,17 @@
 {
     "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
     "meta": {
-        "version": "PTDL_v1",
+        "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2022-02-20T14:03:39+01:00",
+    "exported_at": "2023-03-30T19:01:02+02:00",
     "name": "TS3AudioBot",
-    "author": "Bl4ckBirb @ github",
+    "author": "Bl4ckBirb@github.com",
     "description": "Egg for the TS3AudioBot (https:\/\/github.com\/Splamy\/TS3AudioBot)",
     "features": null,
-    "images": [
-        "ghcr.io\/bl4ckbirb\/pterodactyl-eggs:ts3audiobot"
-    ],
+    "docker_images": {
+        "ghcr.io\/bl4ckbirb\/pterodactyl-eggs:ts3audiobot": "ghcr.io\/bl4ckbirb\/pterodactyl-eggs:ts3audiobot"
+    },
     "file_denylist": [],
     "startup": "dotnet run\/TS3AudioBot.dll --non-interactive",
     "config": {
@@ -35,7 +35,8 @@
             "default_value": "latest",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:10"
+            "rules": "required|string|max:10",
+            "field_type": "text"
         },
         {
             "name": "Download file",
@@ -44,7 +45,8 @@
             "default_value": "TS3AudioBot_dotnetcore3.1.zip",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:50"
+            "rules": "required|string|max:50",
+            "field_type": "text"
         },
         {
             "name": "TS server address",
@@ -53,7 +55,8 @@
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string"
+            "rules": "required|string",
+            "field_type": "text"
         },
         {
             "name": "TS server password",
@@ -62,7 +65,8 @@
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "string|nullable"
+            "rules": "string|nullable",
+            "field_type": "text"
         },
         {
             "name": "Channel",
@@ -71,7 +75,8 @@
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "string|nullable"
+            "rules": "string|nullable",
+            "field_type": "text"
         },
         {
             "name": "Channel password",
@@ -80,7 +85,8 @@
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "string|nullable"
+            "rules": "string|nullable",
+            "field_type": "text"
         },
         {
             "name": "Bot name",
@@ -89,7 +95,8 @@
             "default_value": "TS3AudioBot",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:30"
+            "rules": "required|string|max:30",
+            "field_type": "text"
         }
     ]
 }
